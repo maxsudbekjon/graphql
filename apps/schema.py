@@ -62,25 +62,25 @@ class Mutation(graphene.ObjectType):
     create_book = CreateBook.Field()
 
 #
-# from django.db.models import Q
-#
-#
-# class Search(graphene.ObjectType):
-#     search_books = graphene.List(BookType, keyword=graphene.String())
-#
-#     def resolve_search_books(self, info, keyword=None):
-#         if keyword:
-#             search = (Q(title__icontains=keyword) |
-#                      Q(title__iexact=keyword) |
-#                      Q(title__istartswith=keyword) |
-#                      Q(title__contains=keyword) |
-#                      Q(author__icontains=keyword) |
-#                      Q(author__iexact=keyword) |
-#                      Q(author__istartswith=keyword) |
-#                      Q(author__contains=keyword))
-#             return Book.objects.filter(search)
-#
-#         return Book.objects.all()
+from django.db.models import Q
+
+
+class Search(graphene.ObjectType):
+    search_books = graphene.List(BookType, keyword=graphene.String())
+
+    def resolve_search_books(self, info, keyword=None):
+        if keyword:
+            search = (Q(title__icontains=keyword) |
+                     Q(title__iexact=keyword) |
+                     Q(title__istartswith=keyword) |
+                     Q(title__contains=keyword) |
+                     Q(author__icontains=keyword) |
+                     Q(author__iexact=keyword) |
+                     Q(author__istartswith=keyword) |
+                     Q(author__contains=keyword))
+            return Book.objects.filter(search)
+
+        return Book.objects.all()
 # class Query(graphene.ObjectType):
 #     get_author_with_books = graphene.Field(AuthorType, id=graphene.ID(required=True))
 #
@@ -99,14 +99,14 @@ class Mutation(graphene.ObjectType):
 #         if limit:
 #             books = books[:limit]
 #         return books
-class Query(graphene.ObjectType):
-    books = graphene.List(BookType, title=graphene.String())
-
-    def resolve_books(self, info, title=None):
-        if title is None:
-            raise GraphQLError('Title is required')
-
-        return Book.objects.filter(title__icontains=title)
+# class Query(graphene.ObjectType):
+#     books = graphene.List(BookType, title=graphene.String())
+#
+#     def resolve_books(self, info, title=None):
+#         if title is None:
+#             raise GraphQLError('Title is required')
+#
+#         return Book.objects.filter(title__icontains=title)
 
 
 schema = graphene.Schema(query=Query, mutation=Mutation)

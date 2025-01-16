@@ -126,3 +126,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GRAPHENE = {
     "SCHEMA": "django_root.schema.schema"
 }
+
+# http://5.42.220.153.:8080/api/v1/graphql
